@@ -3,7 +3,7 @@ import json
 import logging
 import time
 from random import choice
-import os
+
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -67,7 +67,7 @@ class HealthRep:
             detailed_area_input = self.__get_element_by_xpath(
                 '//*[@id="iform"]/div[1]/div[3]/form/div[6]/div/div/div[2]/div/div/div/div[1]/input')
             detailed_area_input.clear()
-            detailed_area_input.send_keys(env['location'])
+            detailed_area_input.send_keys('浙江省 杭州市 钱塘区')
             # 因为数据有自动填充，所以这一段不需要了
             # workflow = \
             # [
@@ -81,8 +81,13 @@ class HealthRep:
             #     '//*[@id="iform"]/div[1]/div[3]/form/div[17]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 无省外旅行史
             #     '//*[@id="iform"]/div[1]/div[3]/form/div[18]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 家人无风险地区旅行史
             # ]
-            # for work in workflow:
-            #     self.__get_element_by_xpath(work).click()
+            workflow = \
+            [
+                '//*[@id="iform"]/div[1]/div[3]/form/div[21]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行核酸检测
+                '//*[@id="iform"]/div[1]/div[3]/form/div[22]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行抗原检测
+            ]
+            for work in workflow:
+                self.__get_element_by_xpath(work).click()
 
             self.__get_element_by_xpath(
                 '//*[@id="iform"]/div[1]/div[4]/div/button[1]').click()
@@ -136,18 +141,19 @@ def main():
                         format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
     hr = HealthRep()
-    if hr.login(env['username'], env['password']) and hr.do():
-        logging.info('succeed: {}'.format(env['username']))
-        hr.destruct()
-        print('successful!')
-        return('successful!')
-    else:
-        logging.info('failed: {}'.format(env['username']))
-        hr.destruct()
-        print('error!')
-        return('error!')
+    with open('./essentials.json', 'r') as f:
+        user = json.loads(f.read())
+        if hr.login(user['username'], user['password']) and hr.do():
+            logging.info('succeed: {}'.format(user['username']))
+            hr.destruct()
+            print('successful!')
+            return('successful!')
+        else:
+            logging.info('failed: {}'.format(user['username']))
+            hr.destruct()
+            print('error!')
+            return('error!')
 
 
 if __name__ == '__main__':
-    env = os.environ
     main()
