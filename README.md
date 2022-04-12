@@ -1,5 +1,5 @@
 # E浙理自动健康申报（新版）
-[![Publish Docker](https://github.com/typenoob/zstu_report/actions/workflows/docker-image.yml/badge.svg)](https://github.com/typenoob/zstu_report/actions/workflows/docker-image.yml)
+[![Publish Docker](https://github.com/typenoob/zstu_report/actions/workflows/publish_docker.yml/badge.svg)](https://github.com/typenoob/zstu_report/actions/workflows/publish_docker.yml)
 ![School](https://img.shields.io/badge/School-ZSTU-lightblue.svg)
 
 **！请填写登录sso的学号和密码，不能是手机号。**
