@@ -82,9 +82,10 @@ class HealthRep:
             #     '//*[@id="iform"]/div[1]/div[3]/form/div[18]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 家人无风险地区旅行史
             # ]
             workflow = \
-            [
-                '//*[@id="iform"]/div[1]/div[3]/form/div[21]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行核酸检测
-                '//*[@id="iform"]/div[1]/div[3]/form/div[22]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行抗原检测
+            [           
+                '//*[@id="iform"]/div[1]/div[3]/form/div[34]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行核酸检测
+                '//*[@id="iform"]/div[1]/div[3]/form/div[35]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行抗原检测
+                '//*[@id="iform"]/div[1]/div[3]/form/div[36]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 当前在校学习
             ]
             for work in workflow:
                 self.__get_element_by_xpath(work).click()
