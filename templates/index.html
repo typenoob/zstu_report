@@ -1,0 +1,24 @@
+<html>
+
+<body>
+    <form action="login" method="post">
+        <p><input type="text" name="xh" placeholder="学号" /></p>
+        <p><input type="password" name="mm" placeholder="密码" /></p>
+        <p><input type="submit" value="更新个人信息" /></p>
+    </form>
+    <form action="go" method="post">
+        <p><input type="submit" value="打卡" /></p>
+    </form>
+    <div>
+        <h3>运行结果</h3>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+</body>
+
+</html>
