@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, request, render_template, flash
-import os
-import datetime
+import main
+import json
 app = Flask(__name__)
 app.secret_key = '123456'
 
@@ -19,28 +19,15 @@ def success(name):
 def login():
     xh = request.form['xh']
     mm = request.form['mm']
-    os.system('sed -i \'1s/=.*/={xh}/\' login.js'.format(xh=xh))
-    os.system('sed -i \'2s/=.*/="{mm}"/\' login.js'.format(mm=mm))
+    essentials = {'username': xh, 'password': mm}
+    with open('./essentials.json', 'w') as f:
+        json.dump(essentials, f)
     return redirect(url_for('hello'))
 
 
 @app.route('/go', methods=['POST'])
 def go():
-    flash(os.popen('python3 robot.py').read())
-    return redirect(url_for('hello'))
-
-
-@app.route('/html', methods=['POST'])
-def html():
-    htmlpath = './log/' + str(datetime.date.today())+'.html'
-    os.system('mv {path} ./log/right.html'.format(path=htmlpath))
-    return redirect(url_for('hello'))
-
-
-@app.route('/pic', methods=['POST'])
-def pic():
-    picpath = './log/' + str(datetime.date.today())+'.png'
-    os.system('mv {path} ./log/right.png'.format(path=picpath))
+    flash(main.main())
     return redirect(url_for('hello'))
 
 
