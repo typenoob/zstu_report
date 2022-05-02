@@ -13,12 +13,12 @@
 
 ```
 docker build -t zstu_report .
-docker run --name zstu_report --restart=always -p 5000:5000 zstu_report
+docker run -d --name zstu_report --restart=always -p 5000:5000 zstu_report
 ```
 
 ### 使用我上传的镜像
 
 ```
-docker run --name zstu_report --restart=always -p 5000:5000 typenoob/zstu_report
+docker run -d --name zstu_report --restart=always -p 5000:5000 typenoob/zstu_report
 ```
 
