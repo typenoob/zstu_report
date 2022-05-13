@@ -47,6 +47,7 @@ docker run -d --name zstu_report --restart=always -p 5000:5000 typenoob/zstu_rep
 ## 通知账号获取
 
 微信扫描下面二维码后
+
 ![image](https://user-images.githubusercontent.com/61347081/168256907-e0b86029-b1d5-4d58-840a-7c3a87640175.png)
 
 将自己的企业微信账号名称填入notify_id字段
