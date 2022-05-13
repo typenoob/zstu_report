@@ -1,4 +1,4 @@
-# E浙理自动健康申报（新版）
+# 浙江理工大学自动健康申报（新版）
 [![Publish Docker](https://github.com/typenoob/zstu_report/actions/workflows/publish-docker.yml/badge.svg)](https://github.com/typenoob/zstu_report/actions/workflows/publish-docker.yml)
 ![School](https://img.shields.io/badge/School-ZSTU-lightblue.svg)
 
