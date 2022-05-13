@@ -18,7 +18,8 @@ RUN apt-get update \
     && echo "flask run --host=0.0.0.0" >> /home/boot.sh \
     && echo "\n" >> /home/boot.sh \
     && echo "/bin/bash" >> /home/boot.sh \
-    && cp run.sh /bin/report
+    && cp run.sh /bin/report \
+    && chmod +x /bin/report
 
 WORKDIR /srv/zstu   
 CMD [ "/bin/bash", "/home/boot.sh" ]
