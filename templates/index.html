@@ -4,7 +4,10 @@
     <form action="login" method="post">
         <p><input type="text" name="xh" placeholder="学号" /></p>
         <p><input type="password" name="mm" placeholder="密码" /></p>
-        <p><input type="submit" value="更新个人信息" /></p>
+        <p><input type="text" name="dq" placeholder="地区(默认 浙江省 杭州市 钱塘区)"></p>
+        <input type="text" name="tz" placeholder="通知账号（选填）">
+        <input type="number" name="cs" placeholder="最大尝试次数（默认 0）">
+        <p><input type="submit" value="添加账号" /></p>
     </form>
     <form action="go" method="post">
         <p><input type="submit" value="打卡" /></p>

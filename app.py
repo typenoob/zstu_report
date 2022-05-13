@@ -19,15 +19,21 @@ def success(name):
 def login():
     xh = request.form['xh']
     mm = request.form['mm']
-    essentials = {'username': xh, 'password': mm}
-    with open('./essentials.json', 'w') as f:
+    dq = request.form['dq'] if request.form['cs'] else '浙江省 杭州市 钱塘区'
+    tz = request.form['tz'] if request.form['cs'] else ''
+    cs = request.form['cs'] if request.form['cs'] else '0'
+    with open('./essentials.json', 'r', encoding='utf-8') as f:
+        essentials = json.load(f)
+    essentials['users'].append(
+        {'username': xh, 'password': mm, 'location': dq, 'notify_id': tz, 'retries': cs})
+    with open('./essentials.json', 'w', encoding='utf-8') as f:
         json.dump(essentials, f)
     return redirect(url_for('hello'))
 
 
 @app.route('/go', methods=['POST'])
 def go():
-    flash(main.main())
+    flash(main.main(dev=True))
     return redirect(url_for('hello'))
 
 

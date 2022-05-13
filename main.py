@@ -3,7 +3,7 @@ import json
 import logging
 import time
 from random import choice
-
+from notify import send_message
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -48,26 +48,25 @@ class HealthRep:
             username_input.send_keys(username)
             password_input.send_keys(password)
             login_button.click()
-            self.__wait.until(EC.alert_is_present())
-            alertObject = self.__client.switch_to.alert
-            alertObject.accept()
-            self.__get_element_by_xpath(
-                '//*[@id="iform"]/div[1]/div[3]/form/div[4]/div/div/div[2]/div/div/div/div/div')
         except Exception as e:
             print(e)
             return False
         else:
             return True
 
-    def do(self) -> bool:
+    def do(self, location: str, workflow: list) -> bool:
         try:
-
+            self.__wait.until(EC.alert_is_present())
+            alertObject = self.__client.switch_to.alert
+            alertObject.accept()
+            self.__get_element_by_xpath(
+                '//*[@id="iform"]/div[1]/div[3]/form/div[4]/div/div/div[2]/div/div/div/div/div')
             self.__client.execute_script(
                 'document.getElementsByClassName("van-field__control")[6].readOnly = false')
             detailed_area_input = self.__get_element_by_xpath(
                 '//*[@id="iform"]/div[1]/div[3]/form/div[6]/div/div/div[2]/div/div/div/div[1]/input')
             detailed_area_input.clear()
-            detailed_area_input.send_keys('浙江省 杭州市 钱塘区')
+            detailed_area_input.send_keys(location)
             # 因为数据有自动填充，所以这一段不需要了
             # workflow = \
             # [
@@ -81,12 +80,15 @@ class HealthRep:
             #     '//*[@id="iform"]/div[1]/div[3]/form/div[17]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 无省外旅行史
             #     '//*[@id="iform"]/div[1]/div[3]/form/div[18]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 家人无风险地区旅行史
             # ]
-            workflow = \
-            [           
-                '//*[@id="iform"]/div[1]/div[3]/form/div[34]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行核酸检测
-                '//*[@id="iform"]/div[1]/div[3]/form/div[35]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 未进行抗原检测
-                '//*[@id="iform"]/div[1]/div[3]/form/div[36]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span', # 当前在校学习
-            ]
+            # workflow = \
+            #     [
+            #         # 未进行核酸检测
+            #         '//*[@id="iform"]/div[1]/div[3]/form/div[21]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span',
+            #         # 未进行抗原检测
+            #         '//*[@id="iform"]/div[1]/div[3]/form/div[22]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span',
+            #         # 当前在校学习
+            #         '//*[@id="iform"]/div[1]/div[3]/form/div[23]/div/div/div[2]/div/div/div/div[1]/div/div[1]/span',
+            #     ]
             for work in workflow:
                 self.__get_element_by_xpath(work).click()
 
@@ -137,23 +139,45 @@ class HealthRep:
         return self.__flag
 
 
-def main():
+def main(dev: bool = False):
     logging.basicConfig(level=logging.INFO, filename="daily.log", filemode="w",
                         format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
     hr = HealthRep()
-    with open('./essentials.json', 'r') as f:
-        user = json.loads(f.read())
-        if hr.login(user['username'], user['password']) and hr.do():
-            logging.info('succeed: {}'.format(user['username']))
+    with open('./essentials.json', 'r', encoding='utf-8') as f:
+        essentials = json.load(f)
+        users = essentials['users']
+        workflow = essentials['workflow']
+        for user in users:
+            retries = user['retries'] if user['retries'] else 0
+            if hr.login(user['username'], user['password']):
+                if hr.check():
+                    if dev:
+                        return '已经打过卡了！'
+                    logging.info(
+                        'already_reported: {}'.format(user['username']))
+                    if user['notify_id']:
+                        send_message(user['notify_id'], '已经打过卡了！')
+                else:
+                    if dev:
+                        return '打卡成功！'
+                    while retries >= 0:
+                        if hr.do(user['location'], workflow):
+                            logging.info(
+                                'succeed: {}'.format(user['username']))
+                            if user['notify_id']:
+                                send_message(user['notify_id'], '打卡成功！')
+                            break
+                        retries -= 1
+                    else:
+                        if dev:
+                            return '打卡失败！'
+                        logging.info('error: {}'.format(user['username']))
+                        if user['notify_id']:
+                            send_message(user['notify_id'], '打卡失败！')
+                        if retries == 0:
+                            break
             hr.destruct()
-            print('successful!')
-            return('successful!')
-        else:
-            logging.info('failed: {}'.format(user['username']))
-            hr.destruct()
-            print('error!')
-            return('error!')
 
 
 if __name__ == '__main__':
