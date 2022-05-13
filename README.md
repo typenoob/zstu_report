@@ -63,4 +63,6 @@ docker run -d --name zstu_report --restart=always -p 5000:5000 typenoob/zstu_rep
 ## TODO
 
 - 使用 `curl -x {ip}:{port} sso.zstu.edu.cn` 验证http代理服务器的可用性后，使用代理服务器进行打卡操作，防止国外机被学校屏蔽ip
+- 自动获取 location 字段
+
 
