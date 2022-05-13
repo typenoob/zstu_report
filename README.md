@@ -25,12 +25,14 @@ docker run -d --name zstu_report --restart=always -p 5000:5000 typenoob/zstu_rep
 
 ## 配置说明
 
-username:你的学号
-password:你的密码
-location:你当前居住的城市（默认：浙江省 杭州市 钱塘区）
-notify_id:通知账号名称（默认：空，详见下文 通知账号获取）
-retries:失败后最大重试次数（默认：0）
-workflows:工作流（详见工作流获取方法）
+配置文件为单一文件essentials.json
+
+- username:你的学号
+- password:你的密码
+- location:你当前居住的城市（默认：浙江省 杭州市 钱塘区）
+- notify_id:通知账号名称（默认：空，详见下文 通知账号获取）
+- retries:失败后最大重试次数（默认：0）
+- workflows:工作流（详见工作流获取方法）
 
 ## 工作流程
 
