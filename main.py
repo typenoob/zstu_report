@@ -148,7 +148,7 @@ def main(dev: bool = False):
         for user in users:
             retries = user.get('retries', 0)
             workflow = user.get('workflow', essentials['workflow'])
-            hr = HealthRep(gui=True)
+            hr = HealthRep()
             if hr.login(user['username'], user['password']):
                 if hr.check():
                     if dev:
