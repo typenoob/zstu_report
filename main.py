@@ -142,14 +142,13 @@ class HealthRep:
 def main(dev: bool = False):
     logging.basicConfig(level=logging.INFO, filename="daily.log", filemode="w",
                         format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-
-    hr = HealthRep()
     with open('./essentials.json', 'r', encoding='utf-8') as f:
         essentials = json.load(f)
         users = essentials['users']
         workflow = essentials['workflow']
         for user in users:
             retries = user['retries'] if user['retries'] else 0
+            hr = HealthRep()
             if hr.login(user['username'], user['password']):
                 if hr.check():
                     if dev:
