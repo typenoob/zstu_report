@@ -145,10 +145,10 @@ def main(dev: bool = False):
     with open('./essentials.json', 'r', encoding='utf-8') as f:
         essentials = json.load(f)
         users = essentials['users']
-        workflow = essentials['workflow']
         for user in users:
-            retries = user['retries'] if user['retries'] else 0
-            hr = HealthRep()
+            retries = user.get('retries', 0)
+            workflow = user.get('workflow', essentials['workflow'])
+            hr = HealthRep(gui=True)
             if hr.login(user['username'], user['password']):
                 if hr.check():
                     if dev:
