@@ -3,6 +3,7 @@ import json
 import logging
 import time
 from random import choice
+from tokenize import Triple
 from notify import send_message
 import requests
 from selenium import webdriver
@@ -40,11 +41,11 @@ class HealthRep:
                 ]
             self.__client.get(choice(urls))
             username_input = self.__get_element_by_xpath(
-                '/html/body/app-root/app-right-root/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[1]/nz-input-group/input')
+                '/html/body/app-root/app-right-root/rg-page-container/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[1]/nz-input-group/input')
             password_input = self.__get_element_by_xpath(
-                '/html/body/app-root/app-right-root/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[2]/nz-input-group/input')
+                '/html/body/app-root/app-right-root/rg-page-container/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[2]/nz-input-group/input')
             login_button = self.__get_element_by_xpath(
-                '/html/body/app-root/app-right-root/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[6]/div/button')
+                '/html/body/app-root/app-right-root/rg-page-container/div/div[2]/div[2]/div[2]/div[2]/div[1]/div/div[1]/app-login-normal/div/form/div[6]/div/button')
             username_input.send_keys(username)
             password_input.send_keys(password)
             login_button.click()
@@ -148,7 +149,7 @@ def main(dev: bool = False):
         for user in users:
             retries = user.get('retries', 0)
             workflow = user.get('workflow', essentials['workflow'])
-            hr = HealthRep()
+            hr = HealthRep(gui=True)
             if hr.login(user['username'], user['password']):
                 if hr.check():
                     if dev:
