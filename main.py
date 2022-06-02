@@ -97,7 +97,7 @@ class HealthRep:
                 '//*[@id="iform"]/div[1]/div[4]/div/button[1]').click()
             self.__get_element_by_xpath(
                 '/html/body/div[3]/div[3]/button[2]').click()
-
+            time.sleep(1)
             if not self.check():
                 raise RuntimeError("E")
 
